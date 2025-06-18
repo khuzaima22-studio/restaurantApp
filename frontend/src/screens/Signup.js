@@ -19,7 +19,7 @@ function Signup() {
     console.log(name);
     setLoading(true);
     try {
-      const response = await fetch('https://restaurantapp-5mka.onrender.com/api/signup', {
+      const response = await fetch('https://restaurantapp-csbk.onrender.com/api/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

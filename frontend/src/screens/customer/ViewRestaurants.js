@@ -17,7 +17,7 @@ function ViewRestaurants() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('https://restaurantapp-5mka.onrender.com/api/getBranches');
+      const res = await fetch('https://restaurantapp-csbk.onrender.com/api/getBranches');
       const data = await res.json();
       setRestaurants(data);
     } catch (err) {
@@ -55,7 +55,7 @@ function ViewRestaurants() {
               onClick={() => navigate(`/dashboard/customer/restaurant/${r._id}`)}
             >
               <img
-                src={r.image ? `https://restaurantapp-5mka.onrender.com/uploads/${r.image}` : '/No_Image_Available.jpg'}
+                src={r.image ? `https://restaurantapp-csbk.onrender.com/uploads/${r.image}` : '/No_Image_Available.jpg'}
                 alt={r.name}
                 style={{ width: 220, height: 120, objectFit: 'contain', borderRadius: 8, marginBottom: 12 }}
               />

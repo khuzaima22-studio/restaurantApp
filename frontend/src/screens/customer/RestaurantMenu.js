@@ -39,7 +39,7 @@ function RestaurantMenu() {
     if (!id) return;
     localStorage.setItem("branchId", id)
     setLoading(true);
-    fetch(`https://restaurantapp-5mka.onrender.com/api/getMenu/${id}`)
+    fetch(`https://restaurantapp-csbk.onrender.com/api/getMenu/${id}`)
       .then(res => res.json())
       .then(data => setMenu(data.items || []))
       .catch(() => setError('Failed to fetch menu'))
@@ -104,7 +104,7 @@ function RestaurantMenu() {
     }
     try {
       setLoading(true);
-      const res = await fetch(`https://restaurantapp-5mka.onrender.com/api/addBooking`, {
+      const res = await fetch(`https://restaurantapp-csbk.onrender.com/api/addBooking`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -184,7 +184,7 @@ function RestaurantMenu() {
             return (
               <div key={item._id} style={{ width: 240, background: '#fafdff', borderRadius: 12, boxShadow: '0 2px 8px #e3f0ff', padding: 18, display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
                 <img
-                  src={item.image ? `https://restaurantapp-5mka.onrender.com/uploads/${item.image}` : '/No_Image_Available.jpg'}
+                  src={item.image ? `https://restaurantapp-csbk.onrender.com/uploads/${item.image}` : '/No_Image_Available.jpg'}
                   alt={item.name}
                   style={{ width: 120, height: 120, objectFit: 'cover', borderRadius: 80, marginBottom: 12, boxShadow: '0 1px 4px #b6c6e3' }}
                 />

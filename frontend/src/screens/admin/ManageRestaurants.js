@@ -23,7 +23,7 @@ function ManageRestaurants() {
   const [editingBranch, setEditingBranch] = useState()
   const fetchBranches = async () => {
     try {
-      const response = await fetch('https://restaurantapp-5mka.onrender.com/api/getBranches');
+      const response = await fetch('https://restaurantapp-csbk.onrender.com/api/getBranches');
       const data = await response.json();
       setRestaurants(data);
     } catch (error) {
@@ -33,7 +33,7 @@ function ManageRestaurants() {
 
   const fetchManagers = async () => {
     try {
-      const response = await fetch('https://restaurantapp-5mka.onrender.com/api/getManagers');
+      const response = await fetch('https://restaurantapp-csbk.onrender.com/api/getManagers');
       const data = await response.json();
       setManagersArray(data);
     } catch (error) {
@@ -59,7 +59,7 @@ function ManageRestaurants() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         setLoading(true);
-        const response = await fetch("https://restaurantapp-5mka.onrender.com/api/deleteBranches", {
+        const response = await fetch("https://restaurantapp-csbk.onrender.com/api/deleteBranches", {
           method: "DELETE",
           headers: {
             'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ function ManageRestaurants() {
     setAddress(branch.address);
     setManager(branch.manager.name);
     setManagerId(branch.manager._id);
-    setImagePreview(`https://restaurantapp-5mka.onrender.com/uploads/${branch.image}`)
+    setImagePreview(`https://restaurantapp-csbk.onrender.com/uploads/${branch.image}`)
     setImage(branch.image)
     setCuisines(branch.cuisines || [])
     setEditingBranch(branch)
@@ -147,7 +147,7 @@ function ManageRestaurants() {
         formData.append("cuisines", cuisine); // or just "cuisines" depending on backend handling
       });
 
-      const response = await fetch(`https://restaurantapp-5mka.onrender.com/api/editBranch/${editingBranch._id}`, {
+      const response = await fetch(`https://restaurantapp-csbk.onrender.com/api/editBranch/${editingBranch._id}`, {
         method: "PUT",
         body: formData // no headers needed; browser sets them for you
       });
@@ -246,7 +246,7 @@ function ManageRestaurants() {
               <tr key={r._id}>
                 <td style={{ padding: 10, border: '1px solid #eee', textAlign: "center", width: "150px" }}>
                   <img
-                    src={r.image ? `https://restaurantapp-5mka.onrender.com/uploads/${r.image}` : '/No_Image_Available.jpg'}
+                    src={r.image ? `https://restaurantapp-csbk.onrender.com/uploads/${r.image}` : '/No_Image_Available.jpg'}
                     alt={r.name}
                     style={{ width: '100px', height: 'auto', borderRadius: '8px' }}
                   />

@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
       try {
         setLoading(true);
-        const response = await fetch('https://restaurantapp-5mka.onrender.com/api/verifyToken', {
+        const response = await fetch('https://restaurantapp-csbk.onrender.com/api/verifyToken', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -11,7 +11,7 @@ function MyBookings() {
   useEffect(() => {
     if (!userData?.id) return;
     setLoading(true);
-    fetch(`https://restaurantapp-5mka.onrender.com/api/getUserBooking/${userData.id}`)
+    fetch(`https://restaurantapp-csbk.onrender.com/api/getUserBooking/${userData.id}`)
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {

@@ -17,7 +17,7 @@ function ManagerBookings() {
 
     setLoading(true);
     try {
-      const res = await fetch(`https://restaurantapp-5mka.onrender.com/api/getBranchBooking/${branchId}`);
+      const res = await fetch(`https://restaurantapp-csbk.onrender.com/api/getBranchBooking/${branchId}`);
       const data = await res.json();
 
       if (Array.isArray(data)) {
@@ -62,7 +62,7 @@ function ManagerBookings() {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await fetch('https://restaurantapp-5mka.onrender.com/api/updateBooking', {
+      const response = await fetch('https://restaurantapp-csbk.onrender.com/api/updateBooking', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
