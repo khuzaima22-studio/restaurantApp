@@ -1,0 +1,9 @@
+services:
+  - type: static
+    name: restaurantapp-frontend
+    staticPublishPath: build
+    buildCommand: npm run build
+    redirects:
+      - source: "/*"
+        destination: "/index.html"
+        status: 200
