@@ -19,19 +19,18 @@ function AddRestaurant() {
   const fileInputRef = useRef(null);
   const isDisabled = managersArray.length === 0;
 
+  const fetchManagers = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/getManagers');
+      const data = await response.json();
+
+      setManagersArray(data);
+    } catch (error) {
+      console.error('Error fetching branches:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchManagers = async () => {
-      try {
-        const response = await fetch('https://restaurantapp-csbk.onrender.com/api/getManagers');
-        const data = await response.json();
-
-        setManagersArray(data);
-      } catch (error) {
-        console.error('Error fetching branches:', error);
-      }
-    };
-
     fetchManagers();
   }, []);
 
@@ -92,10 +91,11 @@ function AddRestaurant() {
         formData.append("cuisines[]", cuisine); // or just "cuisines" depending on backend handling
       });
 
-      const response = await fetch("https://restaurantapp-csbk.onrender.com/api/addBranch", {
+      const response = await fetch("http://localhost:3001/api/addBranch", {
         method: "POST",
         body: formData // no headers needed; browser sets them for you
       });
+
 
       const data = await response.json();
       if (!response.ok) throw new Error(data.error);
@@ -108,6 +108,7 @@ function AddRestaurant() {
         showConfirmButton: false,
       });
 
+      fetchManagers();
       setName('');
       setAddress('');
       setManager(managersArray[0]?.name);
@@ -150,27 +151,69 @@ function AddRestaurant() {
           <ClipLoader color="#ffffff" />
         </div>
       )}
-      <div style={{ maxWidth: 500, margin: '0 auto', background: '#fff', borderRadius: 12, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', padding: 32, overflowY: 'auto' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: 24 }}>Add Restaurant</h2>
-        <form onSubmit={handleSubmit}>
-          {isDisabled && (
-            <p style={{ color: '#d32f2f', fontSize: 16, textAlign: 'center', marginBottom: 18 }}>
-              ⚠️ No managers available. Please create a manager first.
-            </p>
-          )}
-          <div style={{ marginBottom: 18 }}>
-            <label style={{ fontWeight: 500 }}>Branch Name:</label>
-            <input type="text" value={name} onChange={e => setName(e.target.value)} disabled={isDisabled} required style={{ width: '100%', padding: 10, marginTop: 6, borderRadius: 6, border: '1px solid #ccc', fontSize: 16, boxSizing: 'border-box' }} />
+      <div style={{ maxWidth: 640, margin: '0 auto', background: '#ffffff', borderRadius: 20, boxShadow: '0 6px 24px rgba(25, 118, 210, 0.08)', padding: 40, overflowY: 'auto' }} >
+        <h2 style={{ textAlign: 'center', color: '#1976d2', fontSize: 26, fontWeight: 700, borderBottom: '2px solid #1976d2',marginBottom: 28 }} > Add Restaurant </h2>
+        <form onSubmit={handleSubmit}> {isDisabled && (<p style={{ color: '#d32f2f', fontSize: 16, fontWeight: 500, textAlign: 'center', marginBottom: 24 }} >
+          ⚠️ No managers available. Please create a manager first. </p>)}
+          <div style={{ marginBottom: 20 }}>
+            <label style={{ fontWeight: 600, color: '#333' }}>Branch Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              disabled={isDisabled}
+              required
+              style={{
+                width: '100%',
+                padding: 12,
+                marginTop: 6,
+                borderRadius: 10,
+                border: '1px solid #ccdcec',
+                fontSize: 16
+              }}
+            />
           </div>
-          <div style={{ marginBottom: 18 }}>
-            <label style={{ fontWeight: 500 }}>Address:</label>
-            <input type="text" value={address} onChange={e => setAddress(e.target.value)} disabled={isDisabled} required style={{ width: '100%', padding: 10, marginTop: 6, borderRadius: 6, border: '1px solid #ccc', fontSize: 16, boxSizing: 'border-box' }} />
+
+          <div style={{ marginBottom: 20 }}>
+            <label style={{ fontWeight: 600, color: '#333' }}>Address</label>
+            <input
+              type="text"
+              value={address}
+              onChange={e => setAddress(e.target.value)}
+              disabled={isDisabled}
+              required
+              style={{
+                width: '100%',
+                padding: 12,
+                marginTop: 6,
+                borderRadius: 10,
+                border: '1px solid #ccdcec',
+                fontSize: 16
+              }}
+            />
           </div>
-          <div style={{ marginBottom: 18 }}>
-            <label style={{ fontWeight: 500, display: 'block', marginBottom: 6 }}>Cuisine(s):</label>
+
+          <div style={{ marginBottom: 20 }}>
+            <label style={{ fontWeight: 600, color: '#333', marginBottom: 8, display: 'block' }}>
+              Cuisine(s)
+            </label>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
               {CUISINE_OPTIONS.map(option => (
-                <label key={option} style={{ display: 'flex', alignItems: 'center', gap: 4, fontWeight: 400, background: cuisines.includes(option) ? '#e3f2fd' : '#f5f5f5', borderRadius: 4, padding: '4px 10px', cursor: 'pointer' }}>
+                <label
+                  key={option}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    background: cuisines.includes(option) ? '#e3f2fd' : '#f1f1f1',
+                    border: cuisines.includes(option) ? '1px solid #1976d2' : '1px solid #ddd',
+                    borderRadius: 20,
+                    padding: '6px 12px',
+                    fontSize: 14,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
                   <input
                     type="checkbox"
                     value={option}
@@ -184,22 +227,84 @@ function AddRestaurant() {
               ))}
             </div>
           </div>
-          <div style={{ marginBottom: 18 }}>
-            <label style={{ fontWeight: 500 }}>Manager</label>
-            <select value={manager} onChange={e => { setManager(e.target.value.name); setManagerId(e.target.value._id) }} disabled={isDisabled} required style={{ width: '100%', padding: 10, marginTop: 6, borderRadius: 6, border: '1px solid #ccc', fontSize: 16, boxSizing: 'border-box' }} >
-              {managersArray && managersArray.map(r => (
-                <option key={r.name} value={r}>{r.name}</option>
-              ))}
+
+          <div style={{ marginBottom: 20 }}>
+            <label style={{ fontWeight: 600, color: '#333' }}>Manager</label>
+            <select
+              value={manager}
+              onChange={e => {
+                const selected = managersArray.find(r => r.name === e.target.value);
+                if (selected) {
+                  setManager(selected.name);
+                  setManagerId(selected._id);
+                }
+              }}
+              disabled={isDisabled}
+              required
+              style={{
+                width: '100%',
+                padding: 12,
+                marginTop: 6,
+                borderRadius: 10,
+                border: '1px solid #ccdcec',
+                fontSize: 16
+              }}
+            >
+              <option value="">-- Select a Manager --</option>
+              {managersArray &&
+                managersArray.map(r => (
+                  <option key={r._id} value={r.name}>
+                    {r.name}
+                  </option>
+                ))}
             </select>
           </div>
-          <div style={{ marginBottom: 18 }}>
-            <label style={{ fontWeight: 500 }}>Image (optional):</label>
-            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} disabled={isDisabled} style={{ display: 'block', marginTop: 6 }} />
+
+          <div style={{ marginBottom: 20 }}>
+            <label style={{ fontWeight: 600, color: '#333' }}>Image (optional)</label>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              disabled={isDisabled}
+              style={{ display: 'block', marginTop: 8 }}
+            />
             {imagePreview && (
-              <img src={imagePreview} alt="Preview" style={{ marginTop: 12, maxWidth: '100%', maxHeight: 180, borderRadius: 8, boxShadow: '0 1px 6px #ccc' }} />
+              <img
+                src={imagePreview}
+                alt="Preview"
+                style={{
+                  marginTop: 12,
+                  maxWidth: '100%',
+                  maxHeight: 180,
+                  borderRadius: 10,
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                }}
+              />
             )}
           </div>
-          <button type="submit" disabled={isDisabled} style={{ width: '100%', padding: '12px 0', background: '#1976d2', color: '#fff', border: 'none', borderRadius: 6, fontSize: 18, fontWeight: 600, cursor: isDisabled ? 'not-allowed' : 'pointer', marginTop: 10, boxShadow: '0 1px 4px #1976d233' }}>Add Restaurant</button>
+
+          <button
+            type="submit"
+            disabled={isDisabled}
+            style={{
+              width: '100%',
+              padding: '14px 0',
+              background: isDisabled ? '#ccc' : '#1976d2',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 10,
+              fontSize: 18,
+              fontWeight: 600,
+              cursor: isDisabled ? 'not-allowed' : 'pointer',
+              marginTop: 16,
+              boxShadow: '0 2px 6px rgba(25, 118, 210, 0.2)',
+              transition: 'all 0.3s ease'
+            }}
+          >
+            Add Restaurant
+          </button>
         </form>
       </div>
     </>

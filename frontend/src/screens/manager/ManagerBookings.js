@@ -17,7 +17,7 @@ function ManagerBookings() {
 
     setLoading(true);
     try {
-      const res = await fetch(`https://restaurantapp-csbk.onrender.com/api/getBranchBooking/${branchId}`);
+      const res = await fetch(`http://localhost:3001/api/getBranchBooking/${branchId}`);
       const data = await res.json();
 
       if (Array.isArray(data)) {
@@ -62,7 +62,7 @@ function ManagerBookings() {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await fetch('https://restaurantapp-csbk.onrender.com/api/updateBooking', {
+      const response = await fetch('http://localhost:3001/api/updateBooking', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -112,100 +112,131 @@ function ManagerBookings() {
           <ClipLoader color="#ffffff" />
         </div>
       )}
-      <div style={{ width: 700, margin: '0 auto', background: '#fff', borderRadius: 18, boxShadow: '0 4px 32px #e3f0ff', padding: 40, minHeight: 500 }}>
-        <h2 style={{ color: '#1976d2', marginBottom: 24, textAlign: 'center' }}>Restaurant Bookings</h2>
+      <div style={{
+        width: 780,
+        margin: '40px auto',
+        background: '#fffaf5',
+        borderRadius: 20,
+        boxShadow: '0 4px 32px rgba(181, 81, 63, 0.25)',
+        padding: 48,
+        fontFamily: 'Georgia, serif',
+        border: '1px solid #f1e0d6'
+      }}>
+        <h2 style={{
+          color: '#8B0000',
+          marginBottom: 32,
+          textAlign: 'center',
+          fontSize: 32,
+          letterSpacing: 1,
+          fontWeight: 'bold',
+          textTransform: 'uppercase'
+        }}>
+          Restaurant Bookings
+        </h2>
 
-        {/* Status Filter Dropdown */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 20 }}>
-          <label style={{ fontWeight: 500, marginRight: 8 }}>Filter by Status:</label>
+          <label style={{ fontWeight: 600, marginRight: 10 }}>Filter by Status:</label>
           <select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value)}
-            style={{ padding: '6px 12px', borderRadius: 6, border: '1px solid #ccc', fontSize: 15 }}
+            style={{
+              padding: '8px 16px',
+              borderRadius: 8,
+              border: '1px solid #ccc',
+              fontSize: 15,
+              fontFamily: 'inherit'
+            }}
           >
             {STATUS_OPTIONS.map(status => (
-              <option key={status} value={status}>{status.charAt(0).toUpperCase() + status.slice(1)}</option>
+              <option key={status} value={status}>
+                {status.charAt(0).toUpperCase() + status.slice(1)}
+              </option>
             ))}
           </select>
         </div>
 
-        {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
-
         {filteredBookings.length === 0 && !loading && (
-          <p style={{ color: '#555', fontSize: 18, textAlign: 'center' }}>No bookings found.</p>
+          <p style={{ color: '#333', fontSize: 18, textAlign: 'center', fontStyle: 'italic' }}>
+            No bookings found.
+          </p>
         )}
 
         {!loading && Object.keys(groupedBookings).length > 0 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             {Object.entries(groupedBookings).map(([date, bookingsOnDate]) => (
               <div key={date}>
-                <h3 style={{ color: '#1976d2', marginTop: 20, marginBottom: 12 }}>{date}</h3>
+                <h3 style={{
+                  color: '#A52A2A',
+                  marginTop: 24,
+                  marginBottom: 16,
+                  fontSize: 20,
+                  borderBottom: '1px solid #e4cfc3',
+                  paddingBottom: 4
+                }}>
+                  {date}
+                </h3>
+
                 {bookingsOnDate.map(b => (
-                  <div
-                    key={b._id}
-                    style={{
-                      border: '1px solid #d0e7ff',
-                      borderRadius: 12,
-                      boxShadow: '0 4px 16px rgba(25, 118, 210, 0.08)',
-                      padding: 24,
-                      background: '#ffffff',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 10,
-                      marginBottom: 12
-                    }}
-                  >
+                  <div key={b._id} style={{
+                    border: '1px solid #f1d0c2',
+                    borderRadius: 14,
+                    boxShadow: '0 4px 12px rgba(139, 0, 0, 0.08)',
+                    padding: 28,
+                    background: '#fff',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 14,
+                    marginBottom: 16
+                  }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontWeight: 700, fontSize: 20, color: '#1976d2' }}>
+                      <span style={{
+                        fontWeight: 700,
+                        fontSize: 20,
+                        color: '#3e1f1f'
+                      }}>
                         Booking for {b.seats} {b.seats > 1 ? 'Seats' : 'Seat'}
                       </span>
-                      <span
-                        style={{
-                          fontWeight: 600,
-                          fontSize: 14,
-                          padding: '6px 12px',
-                          borderRadius: 20,
-                          color: '#fff',
-                          background:
-                            b.status === 'approved'
-                              ? '#28a745' // green
-                              : b.status === 'rejected'
-                                ? '#F44336' // Red
-                                : b.status === 'pending'
-                                  ? '#FFC107' // Amber
-                                  : b.status === 'completed'
-                                    ? '#4CAF50' // Green
-                                    : b.status === 'expired'
-                                      ? '#9E9E9E' // Grey
-                                      : '#607D8B',
-                        }}
-                      >
-                        {b.status.charAt(0).toUpperCase() + b.status.slice(1)}
+                      <span style={{
+                        fontWeight: 600,
+                        fontSize: 14,
+                        padding: '6px 14px',
+                        borderRadius: 20,
+                        color: '#fff',
+                        background:
+                          b.status === 'approved' ? '#28a745'
+                            : b.status === 'rejected' ? '#c62828'
+                              : b.status === 'pending' ? '#d17f00'
+                                : b.status === 'completed' ? '#388e3c'
+                                  : '#9e9e9e',
+                        textTransform: 'capitalize'
+                      }}>
+                        {b.status}
                       </span>
+                    </div>
 
+                    <div style={{ color: '#333', fontSize: 16 }}>
+                      <strong>Time:</strong> {b.time}
                     </div>
-                    <div style={{ color: '#333', fontSize: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontWeight: 500 }}>Time:</span>
-                      <span>{b.time}</span>
-                    </div>
-                    <div style={{ color: '#555', fontSize: 15, display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontWeight: 500 }}>Booker:</span>
-                      <span>{b.name}</span>
+
+                    <div style={{ color: '#555', fontSize: 15 }}>
+                      <strong>Booker:</strong> {b.name}
                       <span style={{ margin: '0 8px', color: '#bbb' }}>|</span>
-                      <span style={{ fontWeight: 500 }}>Phone:</span>
-                      <span>{b.phone}</span>
+                      <strong>Phone:</strong> {b.phone}
                     </div>
-                    <div style={{ marginTop: '12px', display: 'flex', gap: '8px' }}>
+
+                    <div style={{ display: 'flex', gap: 10 }}>
                       <button
                         onClick={(e) => handleBookingStatus(e, b._id, "approved")}
                         disabled={b.status !== 'pending'}
                         style={{
-                          backgroundColor: b.status !== 'pending' ? '#ccc' : '#28a745',
+                          backgroundColor: b.status !== 'pending' ? '#ddd' : '#4CAF50',
                           color: '#fff',
                           border: 'none',
-                          padding: '6px 12px',
-                          borderRadius: '4px',
+                          padding: '8px 16px',
+                          borderRadius: '24px',
+                          fontWeight: 600,
                           cursor: b.status !== 'pending' ? 'not-allowed' : 'pointer',
+                          transition: '0.2s'
                         }}
                       >
                         Approve
@@ -215,12 +246,14 @@ function ManagerBookings() {
                         onClick={(e) => handleBookingStatus(e, b._id, "rejected")}
                         disabled={b.status !== 'pending'}
                         style={{
-                          backgroundColor: b.status !== 'pending' ? '#ccc' : '#F44336',
+                          backgroundColor: b.status !== 'pending' ? '#ddd' : '#c62828',
                           color: '#fff',
                           border: 'none',
-                          padding: '6px 12px',
-                          borderRadius: '4px',
+                          padding: '8px 16px',
+                          borderRadius: '24px',
+                          fontWeight: 600,
                           cursor: b.status !== 'pending' ? 'not-allowed' : 'pointer',
+                          transition: '0.2s'
                         }}
                       >
                         Reject
@@ -233,6 +266,7 @@ function ManagerBookings() {
           </div>
         )}
       </div>
+
     </>
   );
 }

@@ -22,18 +22,21 @@ function ManageRestaurants() {
   const fileInputRef = useRef(null);
   const [editingBranch, setEditingBranch] = useState()
   const fetchBranches = async () => {
+    setLoading(true);
     try {
-      const response = await fetch('https://restaurantapp-csbk.onrender.com/api/getBranches');
+      const response = await fetch('http://localhost:3001/api/getBranches');
       const data = await response.json();
       setRestaurants(data);
     } catch (error) {
       console.error('Error fetching branches:', error);
+    }finally{
+      setLoading(false)
     }
   };
 
   const fetchManagers = async () => {
     try {
-      const response = await fetch('https://restaurantapp-csbk.onrender.com/api/getManagers');
+      const response = await fetch('http://localhost:3001/api/getManagers');
       const data = await response.json();
       setManagersArray(data);
     } catch (error) {
@@ -59,7 +62,7 @@ function ManageRestaurants() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         setLoading(true);
-        const response = await fetch("https://restaurantapp-csbk.onrender.com/api/deleteBranches", {
+        const response = await fetch("http://localhost:3001/api/deleteBranches", {
           method: "DELETE",
           headers: {
             'Content-Type': 'application/json',
@@ -90,7 +93,7 @@ function ManageRestaurants() {
     setAddress(branch.address);
     setManager(branch.manager.name);
     setManagerId(branch.manager._id);
-    setImagePreview(`https://restaurantapp-csbk.onrender.com/uploads/${branch.image}`)
+    setImagePreview(`http://localhost:3001/uploads/${branch.image}`)
     setImage(branch.image)
     setCuisines(branch.cuisines || [])
     setEditingBranch(branch)
@@ -147,7 +150,7 @@ function ManageRestaurants() {
         formData.append("cuisines", cuisine); // or just "cuisines" depending on backend handling
       });
 
-      const response = await fetch(`https://restaurantapp-csbk.onrender.com/api/editBranch/${editingBranch._id}`, {
+      const response = await fetch(`http://localhost:3001/api/editBranch/${editingBranch._id}`, {
         method: "PUT",
         body: formData // no headers needed; browser sets them for you
       });
@@ -228,42 +231,39 @@ function ManageRestaurants() {
           <ClipLoader color="#ffffff" />
         </div>
       )}
-      <div style={{ maxWidth: 900, margin: '0 auto', background: '#fff', borderRadius: 18, boxShadow: '0 4px 32px rgba(25, 118, 210, 0.08)', padding: 40, minHeight: 500 }}>
-        <h2  style={{ textAlign: 'center', marginBottom: 24 }}>Manage Restaurants</h2>
-        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 24 }}>
-          <thead>
-            <tr style={{ background: '#f5f5f5' }}>
-              <th style={{ padding: 10, border: '1px solid #eee' }}>Image</th>
-              <th style={{ padding: 10, border: '1px solid #eee' }}>Name</th>
-              <th style={{ padding: 10, border: '1px solid #eee' }}>Address</th>
-              <th style={{ padding: 10, border: '1px solid #eee' }}>Cuisines</th>
-              <th style={{ padding: 10, border: '1px solid #eee' }}>Manager</th>
-              <th style={{ padding: 10, border: '1px solid #eee' }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {restaurants.map(r => (
-              <tr key={r._id}>
-                <td style={{ padding: 10, border: '1px solid #eee', textAlign: "center", width: "150px" }}>
-                  <img
-                    src={r.image ? `https://restaurantapp-csbk.onrender.com/uploads/${r.image}` : '/No_Image_Available.jpg'}
-                    alt={r.name}
-                    style={{ width: '100px', height: 'auto', borderRadius: '8px' }}
-                  />
-                </td>
-
-                <td style={{ padding: 10, border: '1px solid #eee', textAlign: "center" }}>{r.name}</td>
-                <td style={{ padding: 10, border: '1px solid #eee', textAlign: "center" }}>{r.address}</td>
-                <td style={{ padding: 10, border: '1px solid #eee', textAlign: "center" }}>{r.cuisines.join(', ')}</td>
-                <td style={{ padding: 10, border: '1px solid #eee', textAlign: "center" }}>{r.manager.name}</td>
-                <td style={{ padding: 10, border: '1px solid #eee', textAlign: "center" }}>
-                  <button onClick={() => handleEdit(r)} style={{ marginRight: 8, background: '#1976d2', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 14px', cursor: 'pointer' }}>Edit</button>
-                  <button onClick={() => handleDelete(r._id)} style={{ background: '#d32f2f', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 14px', cursor: 'pointer' }}>Delete</button>
-                </td>
+      <div style={{ maxWidth: 1000, margin: '0 auto', background: '#fff', borderRadius: 20, boxShadow: '0 6px 24px rgba(25, 118, 210, 0.08)', padding: 40, minHeight: 500 }} >
+        <h2 style={{ textAlign: 'center', fontSize: 28, fontWeight: 700, color: '#1976d2', marginBottom: 32, borderBottom: '2px solid #1976d2' }} > Manage Restaurants </h2>
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', borderRadius: 12, boxShadow: '0 2px 10px rgba(0, 0, 0, 0.04)', overflow: 'hidden' }} >
+            <thead>
+              <tr style={{ background: '#f0f4f8', color: '#333', fontSize: 15 }}>
+                <th style={thStyle}>Image</th>
+                <th style={thStyle}>Name</th>
+                <th style={thStyle}>Address</th>
+                <th style={thStyle}>Cuisines</th>
+                <th style={thStyle}>Manager</th>
+                <th style={thStyle}>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {restaurants.map(r => (
+                <tr key={r._id} style={{ borderBottom: '1px solid #eee' }}>
+                  <td style={{ ...tdStyle, textAlign: 'center' }}>
+                    <img src={r.image ? `http://localhost:3001/uploads/${r.image}` : '/No_Image_Available.jpg'} alt={r.name} style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8, boxShadow: '0 1px 4px rgba(0,0,0,0.1)' }} />
+                  </td>
+                  <td style={tdStyle}>{r.name}</td>
+                  <td style={tdStyle}>{r.address}</td>
+                  <td style={tdStyle}>{r.cuisines.join(', ')}</td>
+                  <td style={tdStyle}>{r.manager.name}</td>
+                  <td style={{ ...tdStyle, textAlign: 'center' }}>
+                    <button onClick={() => handleEdit(r)} style={{ ...btnBase, background: '#1976d2', marginRight: 6 }} > Edit </button>
+                    <button onClick={() => handleDelete(r._id)} style={{ ...btnBase, background: '#d32f2f' }} > Delete </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
@@ -347,5 +347,33 @@ function ManageRestaurants() {
     </>
   );
 }
+
+const thStyle = {
+  padding: 14,
+  textAlign: 'center',
+  borderBottom: '1px solid #ddd',
+  fontWeight: 600,
+  background: '#f8f9fa'
+};
+
+const tdStyle = {
+  textAlign: "center",
+  padding: 14,
+  fontSize: 15,
+  color: '#444',
+  verticalAlign: 'middle'
+};
+
+const btnBase = {
+  padding: '6px 14px',
+  color: '#fff',
+  border: 'none',
+  borderRadius: 6,
+  fontWeight: 500,
+  fontSize: 14,
+  cursor: 'pointer',
+  boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+  transition: 'background 0.2s ease'
+};
 
 export default ManageRestaurants; 

@@ -44,7 +44,7 @@ const Checkout = () => {
             }
             setLoading(true);
             // console.log(userData)/
-            const response = await fetch("https://restaurantapp-csbk.onrender.com/api/addOrder", {
+            const response = await fetch("http://localhost:3001/api/addOrder", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -101,155 +101,192 @@ const Checkout = () => {
                     <ClipLoader color="#ffffff" />
                 </div>
             )}
-            <div
-                style={{
+            <div style={{
+                background: '#fefefe',
+                padding: '50px 20px',
+                display: 'flex',
+                justifyContent: 'center',
+                fontFamily: 'Georgia, serif',
+            }}>
+                <div style={{
                     display: 'flex',
-                    justifyContent: 'center',
-                    padding: '40px',
-                    minHeight: '70vh',
-                }}
-            >
-                <div
-                    style={{
-                        display: 'flex',
-                        width: '100%',
-                        maxWidth: '1000px',
-                        borderRadius: '10px',
-                        overflow: 'hidden',
-                        background: '#fff',
-                        boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-                    }}
-                >
-                    {/* Left Side - Cart Items */}
-                    <div style={{ flex: 2, padding: '30px' }}>
-                        <h2 style={{ fontSize: '22px', marginBottom: '25px' }}>Shopping Cart.</h2>
+                    maxWidth: '1100px',
+                    width: '100%',
+                    borderRadius: '18px',
+                    overflow: 'hidden',
+                    background: '#ffffff',
+                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.07)',
+                    border: '1px solid #ddd',
+                }}>
 
-                        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 24 }}>
-                            <thead>
-                                <tr style={{ background: '#f5f5f5' }}>
-                                    <th style={{ padding: 10, border: '1px solid #eee' }}>Name</th>
-                                    <th style={{ padding: 10, border: '1px solid #eee' }}>Quantity</th>
-                                    <th style={{ padding: 10, border: '1px solid #eee' }}>Price</th>
-                                    <th style={{ padding: 10, border: '1px solid #eee' }}>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {cart.map(item => (
-                                    <tr key={item.id}>
-                                        <td style={{ padding: 10, border: '1px solid #eee', textAlign: "center" }}>
-                                            {item.item.name}
-                                        </td>
+                    {/* Cart Table */}
+                    <div style={{ flex: 2, padding: '40px' }}>
+                        <h2 style={{
+                            fontSize: '30px',
+                            fontWeight: 'bold',
+                            color: '#991b1b',
+                            borderBottom: '2px solid #991b1b',
+                            paddingBottom: 12,
+                            marginBottom: 32,
+                        }}>
+                            Shopping Cart
+                        </h2>
 
-
-                                        <td style={{ padding: 10, border: '1px solid #eee' }}>
-                                            <div style={{
-                                                display: 'flex',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                gap: 8
-                                            }}>
-                                                <button onClick={() => handleQtyChange(item.item._id, Math.max(1, item.qty - 1))}>−</button>
-                                                <input
-                                                    type="number"
-                                                    min={1}
-                                                    value={item.qty}
-                                                    onChange={e => handleQtyChange(item.item._id, Math.max(1, parseInt(e.target.value) || 1))}
-                                                    style={{ width: 48, padding: 4, borderRadius: 6, border: '1px solid #b6c6e3', textAlign: 'center' }}
-                                                />
-                                                <button onClick={() => handleQtyChange(item.item._id, item.qty + 1)}>+</button>
-                                            </div>
-                                        </td>
-
-
-                                        <td style={{ padding: 10, border: '1px solid #eee', textAlign: "center" }}>{item.item.price * item.qty}</td>
-
-                                        <td style={{ padding: 10, border: '1px solid #eee', textAlign: "center" }}>
-                                            <button
-                                                onClick={() => handleRemoveFromCart(item.item)}
-                                                style={{ background: '#d32f2f', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 14px', cursor: 'pointer' }}
-                                            >
-                                                Remove
-                                            </button>
-                                        </td>
+                        {cart.length > 0 ? (
+                            <table style={{
+                                width: '100%',
+                                borderCollapse: 'collapse',
+                                borderRadius: 12,
+                                overflow: 'hidden',
+                            }}>
+                                <thead style={{ background: '#f9f9f9', color: '#222' }}>
+                                    <tr>
+                                        <th style={thStyle}>Name</th>
+                                        <th style={thStyle}>Quantity</th>
+                                        <th style={thStyle}>Price</th>
+                                        <th style={thStyle}>Action</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {cart.map(item => (
+                                        <tr key={item.id} style={{ borderBottom: '1px solid #eee' }}>
+                                            <td style={tdStyle}>{item.item.name}</td>
+                                            <td style={tdStyle}>
+                                                <div style={{
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    gap: 8,
+                                                }}>
+                                                    <button onClick={() => handleQtyChange(item.item._id, Math.max(1, item.qty - 1))} style={qtyBtn}>−</button>
+                                                    <input
+                                                        type="number"
+                                                        min={1}
+                                                        value={item.qty}
+                                                        onChange={e => handleQtyChange(item.item._id, Math.max(1, parseInt(e.target.value) || 1))}
+                                                        style={qtyInput}
+                                                    />
+                                                    <button onClick={() => handleQtyChange(item.item._id, item.qty + 1)} style={qtyBtn}>+</button>
+                                                </div>
+                                            </td>
+                                            <td style={{ ...tdStyle, fontWeight: 600 }}>${item.item.price * item.qty}</td>
+                                            <td style={tdStyle}>
+                                                <button onClick={() => handleRemoveFromCart(item.item)} style={removeBtn}>
+                                                    Remove
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <p style={{ color: '#666' }}>Your cart is empty.</p>
+                        )}
                     </div>
 
+                    {/* Summary */}
+                    <div style={{
+                        flex: 1,
+                        background: '#fdfdfd',
+                        padding: '40px',
+                        borderLeft: '1px solid #eee',
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }}>
+                        <h3 style={{
+                            fontSize: 22,
+                            fontWeight: 700,
+                            marginBottom: 24,
+                            color: '#991b1b',
+                            borderBottom: '1px solid #ddd',
+                            paddingBottom: 10,
+                        }}>
+                            Summary
+                        </h3>
 
-                    {/* Right Side - Summary */}
-                    <div
-                        style={{
-                            flex: 1,
-                            background: '#fafafa',
-                            borderLeft: '1px solid #eee',
-                            padding: '30px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'flex-start',
-                        }}
-                    >
-                        <h3 style={{ fontSize: '18px', marginBottom: '25px' }}>Summary</h3>
+                        <div style={summaryRow}><span>Subtotal:</span><span>${total}</span></div>
+                        <div style={summaryRow}><span>Tax:</span><span>Free</span></div>
+                        <div style={{ ...summaryRow, fontWeight: 700, fontSize: 18, marginTop: 16 }}><span>Total:</span><span>${total}</span></div>
 
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                            <span>Subtotal:</span>
-                            <span>${total}</span>
-                        </div>
-
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                fontSize: '12px',
-                                color: '#888',
-                                marginBottom: '10px',
-                            }}
-                        >
-                            <span>Tax:</span>
-                            <span>Free</span>
-                        </div>
-
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                fontWeight: 'bold',
-                                fontSize: '16px',
-                                marginTop: '10px',
-                            }}
-                        >
-                            <span>Total:</span>
-                            <span>${total}</span>
-                        </div>
-
-                        {/* Spacer to push button down */}
                         <div style={{ flex: 1 }}></div>
 
                         <button
                             onClick={handleConfirmOrder}
+                            disabled={cart.length === 0}
                             style={{
-                                width: '100%',
+                                marginTop: 30,
                                 padding: '12px 0',
-                                background: '#388e3c',
+                                width: '100%',
+                                background: cart.length === 0 ? '#aaa' : '#991b1b',
                                 color: '#fff',
                                 border: 'none',
                                 borderRadius: 8,
                                 fontWeight: 600,
                                 fontSize: 16,
-                                cursor: 'pointer',
-                                marginTop: 18,
+                                cursor: cart.length === 0 ? 'not-allowed' : 'pointer',
+                                transition: 'background 0.3s',
                             }}
                         >
                             Confirm Order
                         </button>
                     </div>
-
                 </div>
             </div>
+
+
         </>
     );
 };
+
+const thStyle = {
+    padding: 14,
+    fontWeight: 600,
+    fontSize: 15,
+    textAlign: 'center',
+    borderBottom: '2px solid #ddd',
+};
+
+const tdStyle = {
+    padding: 14,
+    textAlign: 'center',
+    fontSize: 15,
+    color: '#333',
+};
+
+const qtyBtn = {
+    padding: '6px 12px',
+    fontSize: 16,
+    background: '#fef2f2',
+    border: '1px solid #e4e4e7',
+    borderRadius: 6,
+    cursor: 'pointer',
+};
+
+const qtyInput = {
+    width: 50,
+    padding: 6,
+    textAlign: 'center',
+    border: '1px solid #ccc',
+    borderRadius: 6,
+};
+
+const removeBtn = {
+    background: '#b91c1c',
+    color: '#fff',
+    padding: '6px 14px',
+    border: 'none',
+    borderRadius: 6,
+    cursor: 'pointer',
+};
+
+const summaryRow = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    fontSize: 16,
+    marginBottom: 10,
+    color: '#333',
+};
+
 
 export default Checkout;
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ClipLoader } from 'react-spinners';
 
 const ROLES = ['worker', 'branch manager', 'head branch manager'];
 
@@ -15,7 +16,7 @@ function ManageUsers() {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const res = await fetch('https://restaurantapp-csbk.onrender.com/api/getManagers/ma', {
+      const res = await fetch('http://localhost:3001/api/getManagers/ma', {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -39,7 +40,7 @@ function ManageUsers() {
   const handleEditSave = async (id) => {
     setLoading(true);
     try {
-      const res = await fetch(`https://restaurantapp-csbk.onrender.com/api/getManagers/${id}`, {
+      const res = await fetch(`http://localhost:3001/api/getManagers/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -59,51 +60,97 @@ function ManageUsers() {
   };
 
   return (
-    <div style={{ maxWidth: 900, margin: '0 auto', background: '#fff', borderRadius: 18, boxShadow: '0 4px 32px rgba(25, 118, 210, 0.08)', padding: 40, minHeight: 500 }}>
-      <h2 style={{ textAlign: 'center', marginBottom: 24 }}>Manage Users</h2>
-      {loading && <p>Loading...</p>}
-      <table style={{ width: '100%', borderCollapse: 'collapse', background: '#fff', borderRadius: 10, boxShadow: '0 1px 8px #eee' }}>
-        <thead>
-          <tr style={{ background: '#f5f5f5' }}>
-            <th style={{ padding: 10, border: '1px solid #eee' }}>Name</th>
-            <th style={{ padding: 10, border: '1px solid #eee' }}>Email</th>
-            <th style={{ padding: 10, border: '1px solid #eee' }}>Role</th>
-            <th style={{ padding: 10, border: '1px solid #eee' }}>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map(user => (
-            <tr key={user._id}>
-              {editId === user._id ? (
-                <>
-                  <td style={{ padding: 10, border: '1px solid #eee' }}>{user.name}</td>
-                  <td style={{ padding: 10, border: '1px solid #eee' }}>{user.email}</td>
-                  <td style={{ padding: 10, border: '1px solid #eee' }}>
-                    <select value={editRole} onChange={e => setEditRole(e.target.value)} style={{ width: '100%', padding: 6, borderRadius: 4, border: '1px solid #ccc' }}>
-                      {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
-                    </select>
-                  </td>
-                  <td style={{ padding: 10, border: '1px solid #eee' }}>
-                    <button onClick={() => handleEditSave(user._id)} style={{ background: '#388e3c', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 14px', cursor: 'pointer', marginRight: 6 }}>Save</button>
-                    <button onClick={() => setEditId(null)} style={{ background: '#aaa', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 14px', cursor: 'pointer' }}>Cancel</button>
-                  </td>
-                </>
-              ) : (
-                <>
-                  <td style={{ padding: 10, border: '1px solid #eee' }}>{user.name}</td>
-                  <td style={{ padding: 10, border: '1px solid #eee' }}>{user.email}</td>
-                  <td style={{ padding: 10, border: '1px solid #eee' }}>{user.role}</td>
-                  <td style={{ padding: 10, border: '1px solid #eee' }}>
-                    <button onClick={() => handleEditClick(user)} style={{ marginRight: 8, background: '#1976d2', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 14px', cursor: 'pointer' }}>Edit</button>
-                  </td>
-                </>
-              )}
+    <div style={{ maxWidth: 960, margin: '0 auto', background: '#ffffff', borderRadius: 20, boxShadow: '0 6px 24px rgba(25, 118, 210, 0.08)', padding: 40, minHeight: 500 }} >
+      <h2 style={{ textAlign: 'center', fontSize: 28, fontWeight: 700, color: '#1976d2', marginBottom: 32, borderBottom: '2px solid #1976d2' }} > Manage Users </h2>
+      {loading && (
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: 200,
+        }}>
+          <ClipLoader color="#991b1b" />
+        </div>
+      )}
+
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', background: '#fff', borderRadius: 12, boxShadow: '0 2px 10px rgba(0,0,0,0.05)', overflow: 'hidden' }} >
+          <thead>
+            <tr style={{ background: '#f0f4f8', color: '#333', fontSize: 15 }}>
+              <th style={thStyle}>Name</th>
+              <th style={thStyle}>Email</th>
+              <th style={thStyle}>Role</th>
+              <th style={thStyle}>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map(user => (
+              <tr key={user._id} style={{ borderBottom: '1px solid #eee' }}>
+                {editId === user._id ? (
+                  <>
+                    <td style={tdStyle}>{user.name}</td>
+                    <td style={tdStyle}>{user.email}</td>
+                    <td style={tdStyle}>
+                      <select value={editRole} onChange={e => setEditRole(e.target.value)} style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #b0c4de', fontSize: 15 }} >
+                        {ROLES.map(r => (
+                          <option key={r} value={r}> {r} </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td style={tdStyle}>
+                      <button onClick={() => handleEditSave(user._id)} style={{ ...btnBase, background: '#2e7d32', marginRight: 8 }} >
+                        Save
+                      </button>
+                      <button onClick={() => setEditId(null)} style={{ ...btnBase, background: '#9e9e9e' }} >
+                        Cancel
+                      </button>
+                    </td>
+                  </>)
+                  : (
+                    <>
+                      <td style={tdStyle}>{user.name}</td>
+                      <td style={tdStyle}>{user.email}</td>
+                      <td style={tdStyle}>{user.role}</td>
+                      <td style={tdStyle}>
+                        <button onClick={() => handleEditClick(user)} style={{ ...btnBase, background: '#1976d2' }} > Edit </button>
+                      </td>
+                    </>
+                  )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
+
+const thStyle = {
+  padding: 14,
+  textAlign: 'left',
+  borderBottom: '1px solid #ddd',
+  fontWeight: 600,
+  background: '#f8f9fa'
+};
+
+const tdStyle = {
+  padding: 14,
+  textAlign: 'left',
+  fontSize: 15,
+  color: '#444',
+  verticalAlign: 'middle'
+};
+
+const btnBase = {
+  padding: '6px 14px',
+  color: '#fff',
+  border: 'none',
+  borderRadius: 6,
+  fontWeight: 500,
+  fontSize: 14,
+  cursor: 'pointer',
+  boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+  transition: 'background 0.2s ease'
+};
 
 export default ManageUsers; 
