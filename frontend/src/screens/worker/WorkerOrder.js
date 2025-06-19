@@ -17,7 +17,7 @@ function WorkerOrder() {
 
         setLoading(true);
         try {
-            const res = await fetch(`http://localhost:3001/api/getOrder/${branchId}`);
+            const res = await fetch(`https://restaurantapp-csbk.onrender.com/api/getOrder/${branchId}`);
             const data = await res.json();
 
             if (Array.isArray(data)) {
@@ -62,7 +62,7 @@ function WorkerOrder() {
         e.preventDefault();
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:3001/api/updateOrder', {
+            const response = await fetch('https://restaurantapp-csbk.onrender.com/api/updateOrder', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

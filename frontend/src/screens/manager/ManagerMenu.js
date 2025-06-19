@@ -30,7 +30,7 @@ function ManagerMenu() {
     // console.log("branchId", branchId);
     if (!branchId) return;
     try {
-      const response = await fetch(`http://localhost:3001/api/getMenu/${branchId}`);
+      const response = await fetch(`https://restaurantapp-csbk.onrender.com/api/getMenu/${branchId}`);
       const data = await response.json();
 
       setMenu(data);
@@ -68,7 +68,7 @@ function ManagerMenu() {
       formData.append('category', category);
 
       if (image) formData.append('image', image);
-      const res = await fetch(`http://localhost:3001/api/addItem/${menu._id}`, {
+      const res = await fetch(`https://restaurantapp-csbk.onrender.com/api/addItem/${menu._id}`, {
         method: 'POST',
         body: formData
       });
@@ -118,7 +118,7 @@ function ManagerMenu() {
       if (result.isConfirmed) {
         try {
           setLoading(true);
-          const res = await fetch(`http://localhost:3001/api/deleteItem/${menu._id}/item/${id}`, { method: 'DELETE' });
+          const res = await fetch(`https://restaurantapp-csbk.onrender.com/api/deleteItem/${menu._id}/item/${id}`, { method: 'DELETE' });
           const data = await res.json();
 
           if (!res.ok) throw new Error(data.error);
@@ -155,7 +155,7 @@ function ManagerMenu() {
       price: item.price,
       category: item.category,
       image: item.image,
-      imagePreview: `http://localhost:3001/uploads/${item.image}`
+      imagePreview: `https://restaurantapp-csbk.onrender.com/uploads/${item.image}`
     });
     setIsModalOpen(true);
   };
@@ -183,7 +183,7 @@ function ManagerMenu() {
       formData.append('category', editFields.category);
       if (editFields.image) formData.append('image', editFields.image);
 
-      const res = await fetch(`http://localhost:3001/api/editItem/${menu._id}`, {
+      const res = await fetch(`https://restaurantapp-csbk.onrender.com/api/editItem/${menu._id}`, {
         method: 'PUT',
         body: formData
       });
@@ -387,7 +387,7 @@ function ManagerMenu() {
                     <>
                       <td style={{ padding: 10, border: '1px solid #eee', textAlign: "center", width: "150px" }}>
                         <img
-                          src={item.image ? `http://localhost:3001/uploads/${item.image}` : '/No_Image_Available.jpg'}
+                          src={item.image ? `https://restaurantapp-csbk.onrender.com/uploads/${item.image}` : '/No_Image_Available.jpg'}
                           alt={item.name}
                           style={{ width: '100px', height: 'auto', borderRadius: '8px' }}
                         />

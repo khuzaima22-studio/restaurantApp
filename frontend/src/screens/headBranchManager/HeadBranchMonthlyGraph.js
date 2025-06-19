@@ -39,14 +39,14 @@ function HeadBranchMonthlyGraph() {
       }
 
       try {
-        const branchesRes = await fetch('http://localhost:3001/api/getBranches');
+        const branchesRes = await fetch('https://restaurantapp-csbk.onrender.com/api/getBranches');
         if (!branchesRes.ok) throw new Error('Failed to fetch branches');
         const branchesData = await branchesRes.json();
 
         const monthlyRevenue = {};
 
         for (const branch of branchesData) {
-          const ordersRes = await fetch(`http://localhost:3001/api/getOrder/${branch._id}`);
+          const ordersRes = await fetch(`https://restaurantapp-csbk.onrender.com/api/getOrder/${branch._id}`);
           if (!ordersRes.ok) throw new Error(`Failed to fetch orders for branch ${branch.name}`);
           const ordersData = await ordersRes.json();
 

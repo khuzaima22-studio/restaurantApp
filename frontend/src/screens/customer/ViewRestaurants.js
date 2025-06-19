@@ -29,7 +29,7 @@ function ViewRestaurants() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('http://localhost:3001/api/getBranches');
+      const res = await fetch('https://restaurantapp-csbk.onrender.com/api/getBranches');
       const data = await res.json();
       setRestaurants(data);
     } catch (err) {
@@ -55,7 +55,7 @@ function ViewRestaurants() {
     }
     try {
       setLoading(true);
-      const res = await fetch(`http://localhost:3001/api/addBooking`, {
+      const res = await fetch(`https://restaurantapp-csbk.onrender.com/api/addBooking`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -148,7 +148,7 @@ function ViewRestaurants() {
               onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
             >
               <img
-                src={r.image ? `http://localhost:3001/uploads/${r.image}` : '/No_Image_Available.jpg'}
+                src={r.image ? `https://restaurantapp-csbk.onrender.com/uploads/${r.image}` : '/No_Image_Available.jpg'}
                 alt={r.name}
                 style={{ width: '100%', height: 180, objectFit: 'cover' }}
               />

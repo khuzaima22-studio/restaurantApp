@@ -22,7 +22,7 @@ function HeadBranchRevenueOverview() {
       }
 
       try {
-        const branchesRes = await fetch('http://localhost:3001/api/getBranches');
+        const branchesRes = await fetch('https://restaurantapp-csbk.onrender.com/api/getBranches');
         if (!branchesRes.ok) throw new Error('Failed to fetch branches');
         const branchesData = await branchesRes.json();
         setBranches(branchesData);
@@ -32,7 +32,7 @@ function HeadBranchRevenueOverview() {
 
         for (const branch of branchesData) {
           console.log(`Fetching orders for branch ID: ${branch._id} (${branch.name})`);
-          const ordersRes = await fetch(`http://localhost:3001/api/getOrder/${branch._id}`);
+          const ordersRes = await fetch(`https://restaurantapp-csbk.onrender.com/api/getOrder/${branch._id}`);
           
           if (!ordersRes.ok) {
             const errorText = await ordersRes.text();

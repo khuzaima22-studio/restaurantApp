@@ -21,7 +21,7 @@ function AddRestaurant() {
 
   const fetchManagers = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/getManagers');
+      const response = await fetch('https://restaurantapp-csbk.onrender.com/api/getManagers');
       const data = await response.json();
 
       setManagersArray(data);
@@ -91,7 +91,7 @@ function AddRestaurant() {
         formData.append("cuisines[]", cuisine); // or just "cuisines" depending on backend handling
       });
 
-      const response = await fetch("http://localhost:3001/api/addBranch", {
+      const response = await fetch("https://restaurantapp-csbk.onrender.com/api/addBranch", {
         method: "POST",
         body: formData // no headers needed; browser sets them for you
       });

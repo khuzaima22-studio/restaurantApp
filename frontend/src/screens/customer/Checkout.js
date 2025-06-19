@@ -44,7 +44,7 @@ const Checkout = () => {
             }
             setLoading(true);
             // console.log(userData)/
-            const response = await fetch("http://localhost:3001/api/addOrder", {
+            const response = await fetch("https://restaurantapp-csbk.onrender.com/api/addOrder", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',

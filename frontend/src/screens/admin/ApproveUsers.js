@@ -15,7 +15,7 @@ function ApproveUsers() {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:3001/api/getManagers/ma', {
+      const res = await fetch('https://restaurantapp-csbk.onrender.com/api/getManagers/ma', {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -39,7 +39,7 @@ function ApproveUsers() {
   const handleEditSave = async (id) => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:3001/api/getManagers/${id}`, {
+      const res = await fetch(`https://restaurantapp-csbk.onrender.com/api/getManagers/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
